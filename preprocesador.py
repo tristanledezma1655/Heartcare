@@ -54,6 +54,8 @@ class preprocesador:
         print(f"Registros eliminados: {antes - len(temp_df)}")
         self.df_limpio = temp_df
 
+        return self.df_limpio
+
     # 2. MUESTREO ESTADÍSTICO INTERMEDIO
     def muestrear_datos(self, margen_error=0.03):
         if self.df_limpio is None:
@@ -86,8 +88,8 @@ class preprocesador:
         y = df_muestreado[target]
 
         # splits en bruto
-        x_temp, x_test, y_temp, y_test = train_test_split(x, y, test_size=0.2, random_state=42, stratify=y)
-        x_train, x_val, y_train, y_val = train_test_split(x_temp, y_temp, test_size=0.25, random_state=42, stratify=y_temp)
+        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42, stratify=y)
+        
 
         # Configura escaladores y codificadores
         scaler = StandardScaler()
@@ -107,7 +109,7 @@ class preprocesador:
         )
 
         # Regresamos los conjuntos limpios pero en bruto.
-        return x_train, y_train, x_val, y_val, x_test, y_test
+        return x_train, y_train, x_test, y_test
 
     def obtener_preprocessor(self):
         return self.preprocessor

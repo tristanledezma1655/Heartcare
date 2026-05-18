@@ -1,3 +1,4 @@
+from joblib.externals.loky.process_executor import MAX_DEPTH
 import numpy as np
 import pandas as pd
 from sklearn.pipeline import Pipeline
@@ -9,6 +10,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
+from xgboost import XGBClassifier
 
 class EvaluadorModelos:
     def __init__(self, preprocesador_obj):
@@ -25,7 +27,8 @@ class EvaluadorModelos:
             "Random Forest": Pipeline([('prep', self.transformador), ('mod', RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42))]),
             # Reemplaza la línea de Gradient Boosting por esta:
             "Naive Bayes": Pipeline([('prep', self.transformador), ('mod', GaussianNB())]),
-            "k-NN": Pipeline([('prep', self.transformador), ('mod', KNeighborsClassifier(n_neighbors=5))])
+            "k-NN": Pipeline([('prep', self.transformador), ('mod', KNeighborsClassifier(n_neighbors=5))]),
+            "Xgboost": Pipeline([('prep',self.transformador),('mod',XGBClassifier(n_estimators=200, max_depth = 6, learning_rate= 0.1, scale_pos_weight = 3, n_jobs= 1, random_state = 42))])
         }
         
     def evaluar_validacion_cruzada(self, x_train, y_train):
@@ -38,7 +41,7 @@ class EvaluadorModelos:
         desviaciones = []
         
         for nombre, pipeline in self.modelos.items():
-            puntuaciones = cross_val_score(pipeline, x_train, y_train, cv=5, scoring='accuracy')
+            puntuaciones = cross_val_score(pipeline, x_train, y_train, cv=5, scoring='recall')
             
             nombres.append(nombre)
             medias.append(puntuaciones.mean())
@@ -47,10 +50,10 @@ class EvaluadorModelos:
         # Construimos la tabla de resultados
         df_res = pd.DataFrame({
             'Modelo': nombres,
-            'Exactitud Promedio (Accuracy)': medias,
+            'Sensibilidad promedio(recall)': medias,
             'Variabilidad (Std)': desviaciones # <-- ¡CÁMBIALA AQUÍ A MINÚSCULA!
         })
-        return df_res.sort_values(by='Exactitud Promedio (Accuracy)', ascending=False).reset_index(drop=True)
+        return df_res.sort_values(by='Sensibilidad promedio(recall)', ascending=False).reset_index(drop=True)
 
     def obtener_predicciones_y_metricas(self, nombre_modelo, x_train, y_train, x_val, y_val):
         """
