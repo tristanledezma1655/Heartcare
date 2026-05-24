@@ -1,0 +1,11 @@
+# Ignorar carpetas de compilación de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignorar carpetas temporales de entornos virtuales o checkpoints
+.ipynb_checkpoints/
+.virtualenv/
+env/
+venv/
