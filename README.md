@@ -1,60 +1,45 @@
-Heartcare: Análisis de Riesgo Cardiovascular
-Este proyecto realiza un análisis integral de un dataset médico para predecir el riesgo cardiovascular, comparando la eficiencia de implementaciones manuales frente a librerías optimizadas y analizando la importancia de las variables clínicas.
+#  HeartCare: Análisis Predictivo de Riesgo Cardiovascular
 
-Info del Dataset
-Se selecciono un dataset de Kaggle que trata de enfermedades cardiovasculares.
-Este dataset se encuentra como ("Cardiovascular Disease dataset") en la url que se presenta a continuacion: https://www.kaggle.com/datasets/sulianova/cardiovascular-disease-dataset
-Fue seleccionado debido a que estan bastante limpios, ordenados, tiene una buena cantidad de registros,
-ademas de ser un tema de interes del grupo al querer saber si podria aportar en algo a la salud publica desde mi carrera.
-Razon simplificada: Se Selecciono por capricho del estudiante que redacta este documento.
+Este proyecto realiza un análisis integral de un dataset médico de 70,000 registros para predecir el riesgo cardiovascular, comparando la eficiencia de implementaciones manuales frente a librerías optimizadas.
 
-En este podemos observar que presenta 11 features, 1 target y 70,000 registros medicos.
-Presenta variables de los tipos int, categorical y binary, no presenta strings.
-Ademas entas variables las clasifican en 3 dependiendo de la procedencia de los datos.
-Estas categorias son:
+##  Descripción del Dataset
+Se utiliza el **Cardiovascular Disease Dataset** (Kaggle), que contiene información clínica y de estilo de vida.
 
+### Categorización de Variables:
+| Categoría | Descripción | Ejemplos |
+| :--- | :--- | :--- |
+| **Objetiva** | Datos fisiológicos directos | Edad, Peso, Género |
+| **Examen** | Resultados de pruebas clínicas | Presión arterial, Colesterol |
+| **Subjetiva** | Información proporcionada por el paciente | Tabaquismo, Actividad física |
 
-Objetivo : información objetiva                                  #Variable tomada en el lugar normalmmente
-Examen : resultados del examen médico                            #Variable tomada mediante examenes medicos XD
-Subjetivo : información proporcionada por el paciente.           #Como su nombre indica la proporciona el paciente y se espera que no mintiera en algo tan importante
+##  Ingeniería de Variables y Preprocesamiento
+* **Transformación Temporal:** Conversión de edad (días) a años.
+* **Nuevas Métricas:** Cálculo del **IMC** (Índice de Masa Corporal) a partir de peso y altura.
+* **Limpieza:** Eliminación de valores atípicos fisiológicamente imposibles (ej. presiones arteriales extremas).
+* **Escalado:** Aplicación de `StandardScaler` y `One-Hot Encoding` mediante Pipelines.
 
-Esta clasificacion no cambia mucho lo que es el entrenamiento ni el proceso de manejar los datos
-solo son consideraciones que se deben tomar a la hora de interpretar los resultados o trabajarlos.
-Ademas es mas profesional XD.
+##  Modelado y Algoritmos
+Se evaluaron 5 modelos, destacando la comparativa entre:
+1. **Regresión Logística:** Modelo base para interpretación clínica.
+2. **XGBoost:** Modelo final optimizado mediante Boosting para capturar relaciones no lineales.
 
-Las variables que encontramos en este documento son:
+### Análisis de Complejidad Computacional
+Se incluyó un estudio comparativo de eficiencia:
+* **Manual:** $O(N \cdot M)$ - Sensible al overhead de Python.
+* **Optimizado (Sklearn/XGBoost):** $O(N)$ o $O(T \log N)$ gracias a la vectorización y paralelismo.
 
-Edad | Característica objetiva | edad | int (días)
-Altura | Característica objetivo | altura | int (cm) |
-Peso | Característica del objetivo | peso | flotación (kg) |
-Género | Característica objetiva | género | código categórico |
-Presión arterial sistólica | Característica de examen | ap_hi | int |
-Presión arterial diastólica | Característica de examen | ap_lo | int |
-Colesterol | Característica del examen | colesterol | 1: normal, 2: por encima de lo normal, 3: muy por encima de lo normal |
-Glucosa | Característica del examen | gluc | 1: normal, 2: por encima de lo normal, 3: muy por encima de lo normal |
-Fumar | Característica subjetiva | humo | binario |
-Consumo de alcohol | Característica subjetiva | alco | binario |
-Actividad física | Característica subjetiva | activo | binario |
-Presencia o ausencia de enfermedad cardiovascular | Variable objetivo | cardio | binario |
+##  Hallazgos Clave
+* **Variable Crítica:** La **Presión Arterial Sistólica** aporta más del 50% de la importancia relativa para la predicción.
+* **Métrica Estrella:** Se priorizó el **Recall (91%)** sobre la Precisión para minimizar los Falsos Negativos en un entorno médico.
+* **Arquitectura:** Estructura basada en Programación Orientada a Objetos (POO) para facilitar la escalabilidad.
 
-Características Principales
-Ingenieria de variables: Se modifico la varible edad para que estuviera en años y se creo una nueva variable IMC a partir de peso y altura eliminando asi estas dos para dejar solo IMC
-Análisis Exploratorio (EDA): Visualización de relaciones complejas mediante matrices de dispersión (Pairplots) e histogramas de densidad.
-Modelado Predictivo: Uso de Lasso Regression para selección de variables y XGBoost para clasificación de alta precisión.
-Estudio de Complejidad: Comparativa asintótica entre algoritmos manuales (O(N \cdot M)) y optimizados mediante vectorización y estructuras de datos avanzadas (O(N)  O(T \log N)).
-Estructura: Se siguio una estructura aproximada a POO con algunas areas de mejora notables pero en su mayoria las partes importantes van por clases
+##  Tecnologías
+`Python 3.x` | `Google Colab` | `Pandas` | `Scikit-Learn` | `XGBoost` | `Seaborn`
 
-Hallazgos Clave
-Variable Crítica: La presión arterial sistólica (ap_hi) se identificó como el predictor con mayor ganancia de información (superior al 50% de importancia relativa).
-Modelos: Se comprobo que el uso de mmodelos predictivos podria hacer un cambio en el ambito medico mientras se trabaje a fondo y se pula
-Modelo a implementar: Se encontro hasta el momento que modelos de prediccion no parammetricos como XGBoost dan un mejor resultado en cuanto a detectar a la gran parte de los enfermos con minimos cambios
-Eficiencia: Las implementaciones de Sklearn demostraron una estabilidad superior frente al ruido de ejecución gracias a la vectorización de bajo nivel.🛠️ 
+##  Instrucciones de Ejecución
 
-Tecnologías Utilizadas
-Lenguaje: Python 3.x
-Entorno: Google Colab
-Librerías: * Pandas & NumPy (Manejo de datos)Seaborn & Matplotlib (Visualización)Scikit-Learn (Lasso, k-NN, Preprocesamiento)XGBoost (Clasificación avanzada)
+Para replicar este análisis en **Google Colab**, sigue estos pasos:
 
-Resultados de Complejidad
-El análisis asintótico incluido en el notebook Main.ipynb muestra cómo el tiempo de ejecución escala según el tamaño del dataset (N):Manual: Sensible al overhead de Python en muestras pequeñas.
-Optimizado: Comportamiento estable que sigue las curvas teóricas de complejidad computacional.
+1. **Configuración del entorno:** Ejecuta las dos primeras celdas del notebook para clonar automáticamente el repositorio y posicionarte en el directorio de trabajo.
+2. **Ignorar secciones de desarrollo:** Las celdas marcadas para *cambios y commits* están deshabilitadas, ya que corresponden a la etapa de desarrollo y finalización del código.
+3. **Flujo de ejecución:** Puedes ejecutar el resto del notebook de forma secuencial para observar el preprocesamiento, el entrenamiento y la comparativa de modelos.
