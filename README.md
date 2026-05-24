@@ -40,6 +40,6 @@ Se incluyó un estudio comparativo de eficiencia:
 
 Para replicar este análisis en **Google Colab**, sigue estos pasos:
 
-1. **Configuración del entorno:** Ejecuta las dos primeras celdas del notebook para clonar automáticamente el repositorio y posicionarte en el directorio de trabajo.
+1. **Configuración del entorno:** Ejecuta las dos primeras celdas del notebook "Main.ipynb" para clonar automáticamente el repositorio y posicionarte en el directorio de trabajo.
 2. **Ignorar secciones de desarrollo:** Las celdas marcadas para *cambios y commits* están deshabilitadas, ya que corresponden a la etapa de desarrollo y finalización del código.
 3. **Flujo de ejecución:** Puedes ejecutar el resto del notebook de forma secuencial para observar el preprocesamiento, el entrenamiento y la comparativa de modelos.
